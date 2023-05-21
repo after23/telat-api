@@ -28,6 +28,9 @@ router.use((req, res, next) => {
 });
 
 router.get("/absen", async (req, res) => {
+  res.setTimeout(120_000, () => {
+    res.status(504).send("Server Timeout");
+  });
   const result: Boolean = await absen();
   console.log(result);
   res.status(200).send("OK");

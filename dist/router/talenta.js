@@ -33,6 +33,9 @@ router.use((req, res, next) => {
     next();
 });
 router.get("/absen", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.setTimeout(120000, () => {
+        res.status(504).send("Server Timeout");
+    });
     const result = yield (0, absen_1.absen)();
     console.log(result);
     res.status(200).send("OK");
