@@ -1,6 +1,16 @@
-import * as puppeteer from "puppeteer";
+// import * as puppeteer from "puppeteer";
 import fs from "fs";
 require("dotenv").config();
+
+let chrome: any = {};
+let puppeteer: any;
+
+if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+  chrome = require("chrome-aws-lambda");
+  puppeteer = require("puppeteer-core");
+} else {
+  puppeteer = require("puppeteer");
+}
 
 const url: string = "https://hr.talenta.co/employee/dashboard";
 const liveAttendanceURL: string = "https://hr.talenta.co/live-attendance";
@@ -24,8 +34,19 @@ const run = async (
   absenBtn: string,
   successSelector: string
 ): Promise<Boolean> => {
-  let browser: puppeteer.Browser | null = null;
-  let page: puppeteer.Page | null = null;
+  let browser;
+  let page;
+  let options: any = { headless: "new" };
+
+  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+    options = {
+      args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
+      defaultViewport: chrome.defaultViewport,
+      executablePath: await chrome.executablePath,
+      headless: "new",
+      ignoreHTTPSErrors: true,
+    };
+  }
   try {
     if (
       typeof process.env.EMAIL === "undefined" ||
@@ -39,7 +60,7 @@ const run = async (
     const latitude: string = process.env.LATITUDE;
     const longitude: string = process.env.LONGITUDE;
 
-    browser = await puppeteer.launch({ headless: "new" });
+    browser = await puppeteer.launch(options);
     page = await browser.newPage();
 
     await page.goto(url);
@@ -48,7 +69,7 @@ const run = async (
     await page.type(emailSelector, email);
     await page.type(passwordSelector, password);
     await page.click(loginBtn);
-    const res: puppeteer.HTTPResponse | null = await page.waitForNavigation();
+    const res = await page.waitForNavigation();
     console.log("logged in!");
     await page.setGeolocation({
       latitude: Number(latitude),
