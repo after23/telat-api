@@ -41,7 +41,7 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
             args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
             defaultViewport: chrome.defaultViewport,
             executablePath: yield chrome.executablePath,
-            headless: "new",
+            headless: true,
             ignoreHTTPSErrors: true,
         };
     }
@@ -75,20 +75,18 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
             throw new Error("Login Failed");
         yield page.goto(liveAttendanceURL);
         console.log("absen page");
-        // await page.waitForSelector(absenBtn);
-        // const checker: puppeteer.ElementHandle<Element> | null = await page.$(
-        //   successSelector
-        // );
+        yield page.waitForSelector(absenBtn);
+        // const checker = await page.$(successSelector);
         // if (checker) throw new Error("udah clockin/clockout");
         // await page.click(absenBtn);
         // await page.waitForSelector(successSelector);
         // const result: string | null = await page.$eval(
         //   successSelector,
-        //   (el) => el.textContent
+        //   (el: any) => el.textContent
         // );
         // if (!result) throw new Error("clock in/out gagal");
         // console.log(`${result} success`);
-        //testing
+        // // testing
         // const test: Buffer = await page.screenshot({ type: "png" });
         // fs.writeFileSync("test.png", test);
         yield page.goto(singOutURL);
