@@ -22,6 +22,9 @@
     "puppeteer": "^20.3.0",
     "puppeteer-core": "^6"
   },
+  "engines": {
+    "node": "^14"
+  },
   "devDependencies": {
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
