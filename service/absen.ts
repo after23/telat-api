@@ -75,7 +75,7 @@ const run = async (
     browser = await puppeteer.launch(options);
     page = await browser.newPage();
 
-    await page.goto(url);
+    await page.goto(url, { waitUntil: "domcontentloaded" });
     await page.waitForSelector(emailSelector);
     console.log("login page");
     const res: Buffer = await page.screenshot({ type: "png" });
