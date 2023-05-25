@@ -43,6 +43,7 @@ const run = async (
       "--single-process",
       "--no-zygote",
       "--disable-web-security",
+      "--use-gl=egl",
     ],
     headless: "new",
     ignoreHTTPSErrors: true,

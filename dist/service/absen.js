@@ -65,6 +65,7 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
             "--single-process",
             "--no-zygote",
             "--disable-web-security",
+            "--use-gl=egl",
         ],
         headless: "new",
         ignoreHTTPSErrors: true,
