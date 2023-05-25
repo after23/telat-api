@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,16 +33,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.absen = void 0;
+const puppeteer = __importStar(require("puppeteer"));
 require("dotenv").config();
 let chrome = {};
-let puppeteer;
-if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-    chrome = require("chrome-aws-lambda");
-    puppeteer = require("puppeteer-core");
-}
-else {
-    puppeteer = require("puppeteer");
-}
+// let puppeteer: any;
+// if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+//   chrome = require("chrome-aws-lambda");
+//   puppeteer = require("puppeteer-core");
+// } else {
+//   puppeteer = require("puppeteer");
+// }
 const url = "https://hr.talenta.co/employee/dashboard";
 const liveAttendanceURL = "https://hr.talenta.co/live-attendance";
 const singOutURL = "https://hr.talenta.co/site/sign-out";
@@ -35,16 +58,27 @@ const clockOutTime = 3600 * 17 + 30 * 60;
 const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, function* () {
     let browser;
     let page;
-    let options = { headless: "new" };
-    if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-        options = {
-            args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
-            defaultViewport: chrome.defaultViewport,
-            executablePath: yield chrome.executablePath,
-            headless: true,
-            ignoreHTTPSErrors: true,
-        };
-    }
+    let options = {
+        args: [
+            "--disable-setuid-sandbox",
+            "no-sandbox",
+            "single-process",
+            "--no-zygote",
+        ],
+        headless: "new",
+        executablePath: process.env.NODE_ENV === "production"
+            ? process.env.PUPPETEER_EXECUTABLE_PATH
+            : puppeteer.executablePath(),
+    };
+    // if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+    //   options = {
+    //     args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
+    //     defaultViewport: chrome.defaultViewport,
+    //     executablePath: await chrome.executablePath,
+    //     headless: true,
+    //     ignoreHTTPSErrors: true,
+    //   };
+    // }
     try {
         if (typeof process.env.EMAIL === "undefined" ||
             typeof process.env.PASSWORD === "undefined" ||
