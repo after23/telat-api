@@ -37,7 +37,10 @@ router.get("/absen", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(504).send("Server Timeout");
     });
     const result = yield (0, absen_1.absen)();
+    if (!result)
+        res.sendStatus(500);
+    res.set({ "Content-Type": "image/png", "Content-Length": result === null || result === void 0 ? void 0 : result.length });
     console.log(result);
-    res.status(200).send("OK");
+    res.status(200).send(result);
 }));
 exports.default = router;

@@ -31,9 +31,11 @@ router.get("/absen", async (req, res) => {
   res.setTimeout(120_000, () => {
     res.status(504).send("Server Timeout");
   });
-  const result: Boolean = await absen();
+  const result: Buffer | null = await absen();
+  if (!result) res.sendStatus(500);
+  res.set({ "Content-Type": "image/png", "Content-Length": result?.length });
   console.log(result);
-  res.status(200).send("OK");
+  res.status(200).send(result);
 });
 
 export default router;

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project ts.config",
     "start": "node dist/index.js",
     "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,6 +27,12 @@
     "@types/node": "^20.2.1",
     "concurrently": "^8.0.1",
     "nodemon": "^2.0.22",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^5.0.1",
     "typescript": "^5.0.4"
-  }
+  },
+  "pre-commit": [
+    "ts.check",
+    "build"
+  ]
 }

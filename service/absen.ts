@@ -33,7 +33,7 @@ const clockOutTime: number = 3600 * 17 + 30 * 60;
 const run = async (
   absenBtn: string,
   successSelector: string
-): Promise<Boolean> => {
+): Promise<Buffer | null> => {
   let browser;
   let page;
   let options: any = { headless: "new" };
@@ -66,21 +66,23 @@ const run = async (
     await page.goto(url);
     await page.waitForSelector(emailSelector);
     console.log("login page");
-    await page.type(emailSelector, email);
-    await page.type(passwordSelector, password);
-    await page.click(loginBtn);
-    const res = await page.waitForNavigation();
-    console.log("logged in!");
-    await page.setGeolocation({
-      latitude: Number(latitude),
-      longitude: Number(longitude),
-    });
-    const context = browser.defaultBrowserContext();
-    await context.overridePermissions(liveAttendanceURL, ["geolocation"]);
-    if (!res || res.status() !== 200) throw new Error("Login Failed");
-    await page.goto(liveAttendanceURL);
-    console.log("absen page");
-    await page.waitForSelector(absenBtn);
+    const res: Buffer = await page.screenshot({ type: "png" });
+    return res;
+    // await page.type(emailSelector, email);
+    // await page.type(passwordSelector, password);
+    // await page.click(loginBtn);
+    // const res = await page.waitForNavigation();
+    // console.log("logged in!");
+    // await page.setGeolocation({
+    //   latitude: Number(latitude),
+    //   longitude: Number(longitude),
+    // });
+    // const context = browser.defaultBrowserContext();
+    // await context.overridePermissions(liveAttendanceURL, ["geolocation"]);
+    // if (!res || res.status() !== 200) throw new Error("Login Failed");
+    // await page.goto(liveAttendanceURL);
+    // console.log("absen page");
+    // await page.waitForSelector(absenBtn);
     // const checker = await page.$(successSelector);
     // if (checker) throw new Error("udah clockin/clockout");
     // await page.click(absenBtn);
@@ -95,19 +97,20 @@ const run = async (
     // // testing
     // const test: Buffer = await page.screenshot({ type: "png" });
     // fs.writeFileSync("test.png", test);
-    await page.goto(singOutURL);
-    console.log("signed out!");
-    return true;
+
+    // await page.goto(singOutURL);
+    // console.log("signed out!");
+    // return true;
   } catch (err) {
     console.error(err);
-    return false;
+    return null;
   } finally {
     await browser?.close();
   }
 };
 
 // console.log(arg);
-const absen = async (): Promise<Boolean> => {
+const absen = async (): Promise<Buffer | null> => {
   try {
     let absenBtn: string = clockInBtn;
     let successSelector: string = clockInSuccessSelector;
@@ -121,7 +124,7 @@ const absen = async (): Promise<Boolean> => {
     return await run(absenBtn, successSelector);
   } catch (err) {
     console.error(err);
-    return false;
+    return null;
   }
 };
 

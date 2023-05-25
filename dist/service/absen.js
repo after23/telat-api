@@ -60,22 +60,23 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
         yield page.goto(url);
         yield page.waitForSelector(emailSelector);
         console.log("login page");
-        yield page.type(emailSelector, email);
-        yield page.type(passwordSelector, password);
-        yield page.click(loginBtn);
-        const res = yield page.waitForNavigation();
-        console.log("logged in!");
-        yield page.setGeolocation({
-            latitude: Number(latitude),
-            longitude: Number(longitude),
-        });
-        const context = browser.defaultBrowserContext();
-        yield context.overridePermissions(liveAttendanceURL, ["geolocation"]);
-        if (!res || res.status() !== 200)
-            throw new Error("Login Failed");
-        yield page.goto(liveAttendanceURL);
-        console.log("absen page");
-        yield page.waitForSelector(absenBtn);
+        const res = yield page.screenshot({ type: "png" });
+        return res;
+        // await page.type(emailSelector, email);
+        // await page.type(passwordSelector, password);
+        // await page.click(loginBtn);
+        // const res = await page.waitForNavigation();
+        // console.log("logged in!");
+        // await page.setGeolocation({
+        //   latitude: Number(latitude),
+        //   longitude: Number(longitude),
+        // });
+        // const context = browser.defaultBrowserContext();
+        // await context.overridePermissions(liveAttendanceURL, ["geolocation"]);
+        // if (!res || res.status() !== 200) throw new Error("Login Failed");
+        // await page.goto(liveAttendanceURL);
+        // console.log("absen page");
+        // await page.waitForSelector(absenBtn);
         // const checker = await page.$(successSelector);
         // if (checker) throw new Error("udah clockin/clockout");
         // await page.click(absenBtn);
@@ -89,13 +90,13 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
         // // testing
         // const test: Buffer = await page.screenshot({ type: "png" });
         // fs.writeFileSync("test.png", test);
-        yield page.goto(singOutURL);
-        console.log("signed out!");
-        return true;
+        // await page.goto(singOutURL);
+        // console.log("signed out!");
+        // return true;
     }
     catch (err) {
         console.error(err);
-        return false;
+        return null;
     }
     finally {
         yield (browser === null || browser === void 0 ? void 0 : browser.close());
@@ -118,7 +119,7 @@ const absen = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (err) {
         console.error(err);
-        return false;
+        return null;
     }
 });
 exports.absen = absen;
