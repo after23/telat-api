@@ -34,9 +34,12 @@ router.get("/absen", async (req, res) => {
   const result: Buffer | string = await absen();
   // if (!result) return res.sendStatus(500);
   if (typeof result == "string") return res.status(500).send(result);
-  res.set({ "Content-Type": "image/png", "Content-Length": result?.length });
+
   console.log(result);
-  return res.status(200).send(result);
+  return res
+    .set({ "Content-Type": "image/png", "Content-Length": result?.length })
+    .status(200)
+    .send(result);
 });
 
 export default router;
