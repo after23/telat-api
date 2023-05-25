@@ -38,11 +38,11 @@ router.get("/absen", (req, res) => __awaiter(void 0, void 0, void 0, function* (
     });
     const result = yield (0, absen_1.absen)();
     if (!result)
-        res.sendStatus(500);
+        return res.sendStatus(500);
     if (typeof result == "string")
-        res.status(500).send(result);
+        return res.status(500).send(result);
     res.set({ "Content-Type": "image/png", "Content-Length": result === null || result === void 0 ? void 0 : result.length });
     console.log(result);
-    res.status(200).send(result);
+    return res.status(200).send(result);
 }));
 exports.default = router;
