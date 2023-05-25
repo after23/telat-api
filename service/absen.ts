@@ -33,7 +33,7 @@ const clockOutTime: number = 3600 * 17 + 30 * 60;
 const run = async (
   absenBtn: string,
   successSelector: string
-): Promise<Buffer | null> => {
+): Promise<Buffer | string> => {
   let browser;
   let page;
   let options: any = { headless: "new" };
@@ -103,19 +103,21 @@ const run = async (
     // return true;
   } catch (err) {
     console.error(err);
-    return null;
+    let message: string = "hmm";
+    if (err instanceof Error) message = err.toString();
+    return message;
   } finally {
     await browser?.close();
   }
 };
 
 // console.log(arg);
-const absen = async (): Promise<Buffer | null> => {
+const absen = async (): Promise<Buffer | string> => {
   try {
     let absenBtn: string = clockInBtn;
     let successSelector: string = clockInSuccessSelector;
     const today: Date = new Date();
-    const now: number = today.getHours() * 3600 + 60 * today.getMinutes();
+    const now: number = today.getUTCHours() * 3600 + 60 * today.getMinutes();
     if (now < 5 * 3600) throw new Error("kepagian");
     if (now > clockOutTime) {
       absenBtn = clockOutBtn;
@@ -124,7 +126,9 @@ const absen = async (): Promise<Buffer | null> => {
     return await run(absenBtn, successSelector);
   } catch (err) {
     console.error(err);
-    return null;
+    let message: string = "hmm";
+    if (err instanceof Error) message = err.toString();
+    return message;
   }
 };
 
