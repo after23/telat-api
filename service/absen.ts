@@ -34,8 +34,8 @@ const run = async (
   absenBtn: string,
   successSelector: string
 ): Promise<Buffer | string> => {
-  let browser;
-  let page;
+  let browser: puppeteer.Browser | null = null;
+  let page: puppeteer.Page | null = null;
   let options: any = {
     args: [
       "--disable-setuid-sandbox",
@@ -121,7 +121,10 @@ const run = async (
     if (err instanceof Error) message = err.toString();
     return message;
   } finally {
-    await browser?.close();
+    if (browser && page) {
+      await page.close();
+      await browser.close();
+    }
   }
 };
 

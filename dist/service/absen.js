@@ -56,8 +56,8 @@ const clockInSuccessSelector = "#tl-live-attendance-index > div > div.tl-content
 const clockOutSuccessSelector = "#tl-live-attendance-index > div > div.tl-content-max__600.my-3.my-md-5.mx-auto.px-3.px-md-0 > div.mt-5 > ul > li:nth-child(2) > div > p";
 const clockOutTime = 3600 * 17 + 30 * 60;
 const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, function* () {
-    let browser;
-    let page;
+    let browser = null;
+    let page = null;
     let options = {
         args: [
             "--disable-setuid-sandbox",
@@ -138,7 +138,10 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
         return message;
     }
     finally {
-        yield (browser === null || browser === void 0 ? void 0 : browser.close());
+        if (browser && page) {
+            yield page.close();
+            yield browser.close();
+        }
     }
 });
 // console.log(arg);
