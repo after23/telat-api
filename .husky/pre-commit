@@ -3,3 +3,4 @@
 
 pnpm ts.check
 pnpm build
+git add .

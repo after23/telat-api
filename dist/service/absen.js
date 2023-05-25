@@ -96,7 +96,10 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
     }
     catch (err) {
         console.error(err);
-        return null;
+        let message = "hmm";
+        if (err instanceof Error)
+            message = err.toString();
+        return message;
     }
     finally {
         yield (browser === null || browser === void 0 ? void 0 : browser.close());
@@ -108,7 +111,7 @@ const absen = () => __awaiter(void 0, void 0, void 0, function* () {
         let absenBtn = clockInBtn;
         let successSelector = clockInSuccessSelector;
         const today = new Date();
-        const now = today.getHours() * 3600 + 60 * today.getMinutes();
+        const now = today.getUTCHours() * 3600 + 60 * today.getMinutes();
         if (now < 5 * 3600)
             throw new Error("kepagian");
         if (now > clockOutTime) {
@@ -119,7 +122,10 @@ const absen = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (err) {
         console.error(err);
-        return null;
+        let message = "hmm";
+        if (err instanceof Error)
+            message = err.toString();
+        return message;
     }
 });
 exports.absen = absen;
