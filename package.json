@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "husky": "husky install",
     "build": "rimraf dist && tsc",
-    "ts.check": "tsc --project ts.config",
+    "ts.check": "tsc --project tsconfig.json",
     "start": "node dist/index.js",
     "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,13 +27,9 @@
     "@types/express": "^4.17.17",
     "@types/node": "^20.2.1",
     "concurrently": "^8.0.1",
+    "husky": "^8.0.3",
     "nodemon": "^2.0.22",
-    "pre-commit": "^1.2.2",
     "rimraf": "^5.0.1",
     "typescript": "^5.0.4"
-  },
-  "pre-commit": [
-    "ts.check",
-    "build"
-  ]
+  }
 }
