@@ -45,7 +45,7 @@ const run = async (
       "--disable-web-security",
       "--use-gl=egl",
     ],
-    headless: "new",
+    headless: true,
     ignoreHTTPSErrors: true,
     executablePath:
       process.env.NODE_ENV === "production"
