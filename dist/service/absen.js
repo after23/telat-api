@@ -61,8 +61,8 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
     let options = {
         args: [
             "--disable-setuid-sandbox",
-            "no-sandbox",
-            "single-process",
+            "--no-sandbox",
+            "--single-process",
             "--no-zygote",
         ],
         headless: "new",

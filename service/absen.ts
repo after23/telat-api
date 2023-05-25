@@ -39,8 +39,8 @@ const run = async (
   let options: any = {
     args: [
       "--disable-setuid-sandbox",
-      "no-sandbox",
-      "single-process",
+      "--no-sandbox",
+      "--single-process",
       "--no-zygote",
     ],
     headless: "new",
