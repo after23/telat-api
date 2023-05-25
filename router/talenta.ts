@@ -16,7 +16,8 @@ declare global {
 
 router.use((req, res, next) => {
   const apikey: string | undefined = process.env.APIKEY;
-  if (typeof apikey == "undefined") return res.sendStatus(500);
+  if (typeof apikey == "undefined")
+    return res.status(500).send("missing api key in env");
   const key = req.query["api-key"];
   //api key is missing
   if (!key) return res.status(400).json({ error: "apikey is required" });

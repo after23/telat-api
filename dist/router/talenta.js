@@ -20,7 +20,7 @@ dotenv_1.default.config();
 router.use((req, res, next) => {
     const apikey = process.env.APIKEY;
     if (typeof apikey == "undefined")
-        return res.sendStatus(500);
+        return res.status(500).send("missing api key in env");
     const key = req.query["api-key"];
     //api key is missing
     if (!key)
