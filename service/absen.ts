@@ -76,7 +76,7 @@ const run = async (
 
     browser = await puppeteer.launch(options);
     page = await browser.newPage();
-
+    page.setDefaultTimeout(180_000);
     await page.goto(url, { waitUntil: "domcontentloaded" });
     await page.waitForSelector(emailSelector);
     console.log("login page");

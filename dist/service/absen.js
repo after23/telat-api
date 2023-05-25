@@ -93,6 +93,7 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
         const longitude = process.env.LONGITUDE;
         browser = yield puppeteer.launch(options);
         page = yield browser.newPage();
+        page.setDefaultTimeout(180000);
         yield page.goto(url, { waitUntil: "domcontentloaded" });
         yield page.waitForSelector(emailSelector);
         console.log("login page");
