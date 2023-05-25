@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const absen_1 = require("../service/absen");
+const stream_1 = require("stream");
 const router = (0, express_1.default)();
 dotenv_1.default.config();
 router.use((req, res, next) => {
@@ -36,14 +37,19 @@ router.get("/absen", (req, res) => __awaiter(void 0, void 0, void 0, function* (
     res.setTimeout(240000, () => {
         return res.status(504).send("Server Timeout");
     });
-    const result = yield (0, absen_1.absen)();
-    // if (!result) return res.sendStatus(500);
-    if (typeof result == "string")
-        return res.status(500).send(result);
-    console.log(result);
-    return res
-        .set({ "Content-Type": "image/png", "Content-Length": result === null || result === void 0 ? void 0 : result.length })
-        .status(200)
-        .send(result);
+    const absenResult = yield (0, absen_1.absen)();
+    // if (!absenResult) return res.sendStatus(500);
+    if (typeof absenResult == "string")
+        return res.status(500).send(absenResult);
+    // console.log(absenResult);
+    const readStream = new stream_1.Stream.PassThrough();
+    readStream.end(absenResult);
+    res
+        .set({
+        "Content-Type": "image/png",
+        "Content-disosition": "attachment; filename=absen.png",
+    })
+        .status(200);
+    return readStream.pipe(res);
 }));
 exports.default = router;
