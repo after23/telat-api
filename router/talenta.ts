@@ -28,11 +28,11 @@ router.use((req, res, next) => {
 });
 
 router.get("/absen", async (req, res) => {
-  res.setTimeout(120_000, () => {
+  res.setTimeout(240_000, () => {
     res.status(504).send("Server Timeout");
   });
   const result: Buffer | string = await absen();
-  if (!result) return res.sendStatus(500);
+  // if (!result) return res.sendStatus(500);
   if (typeof result == "string") return res.status(500).send(result);
   res.set({ "Content-Type": "image/png", "Content-Length": result?.length });
   console.log(result);

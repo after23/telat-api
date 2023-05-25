@@ -33,12 +33,11 @@ router.use((req, res, next) => {
     next();
 });
 router.get("/absen", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.setTimeout(120000, () => {
+    res.setTimeout(240000, () => {
         res.status(504).send("Server Timeout");
     });
     const result = yield (0, absen_1.absen)();
-    if (!result)
-        return res.sendStatus(500);
+    // if (!result) return res.sendStatus(500);
     if (typeof result == "string")
         return res.status(500).send(result);
     res.set({ "Content-Type": "image/png", "Content-Length": result === null || result === void 0 ? void 0 : result.length });

@@ -64,8 +64,10 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
             "--no-sandbox",
             "--single-process",
             "--no-zygote",
+            "--disable-web-security",
         ],
         headless: "new",
+        ignoreHTTPSErrors: true,
         executablePath: process.env.NODE_ENV === "production"
             ? process.env.PUPPETEER_EXECUTABLE_PATH
             : puppeteer.executablePath(),
