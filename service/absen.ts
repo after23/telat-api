@@ -135,7 +135,8 @@ const absen = async (): Promise<Buffer | string> => {
     let absenBtn: string = clockInBtn;
     let successSelector: string = clockInSuccessSelector;
     const today: Date = new Date();
-    const now: number = today.getUTCHours() * 3600 + 60 * today.getMinutes();
+    const now: number =
+      (today.getUTCHours() + 7) * 3600 + 60 * today.getMinutes();
     if (now < 5 * 3600) throw new Error("kepagian");
     if (now > clockOutTime) {
       absenBtn = clockOutBtn;

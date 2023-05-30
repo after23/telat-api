@@ -152,7 +152,7 @@ const absen = () => __awaiter(void 0, void 0, void 0, function* () {
         let absenBtn = clockInBtn;
         let successSelector = clockInSuccessSelector;
         const today = new Date();
-        const now = today.getUTCHours() * 3600 + 60 * today.getMinutes();
+        const now = (today.getUTCHours() + 7) * 3600 + 60 * today.getMinutes();
         if (now < 5 * 3600)
             throw new Error("kepagian");
         if (now > clockOutTime) {
