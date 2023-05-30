@@ -81,40 +81,39 @@ const run = async (
     await page.goto(url, { waitUntil: "domcontentloaded" });
     await page.waitForSelector(emailSelector);
     console.log("login page");
-    const res: Buffer = await page.screenshot({ type: "png" });
-    return res;
-    // await page.type(emailSelector, email);
-    // await page.type(passwordSelector, password);
-    // await page.click(loginBtn);
-    // const res = await page.waitForNavigation();
-    // console.log("logged in!");
-    // await page.setGeolocation({
-    //   latitude: Number(latitude),
-    //   longitude: Number(longitude),
-    // });
-    // const context = browser.defaultBrowserContext();
-    // await context.overridePermissions(liveAttendanceURL, ["geolocation"]);
-    // if (!res || res.status() !== 200) throw new Error("Login Failed");
-    // await page.goto(liveAttendanceURL);
-    // console.log("absen page");
-    // await page.waitForSelector(absenBtn);
-    // const checker = await page.$(successSelector);
-    // if (checker) throw new Error("udah clockin/clockout");
-    // await page.click(absenBtn);
-    // await page.waitForSelector(successSelector);
-    // const result: string | null = await page.$eval(
-    //   successSelector,
-    //   (el: any) => el.textContent
-    // );
-    // if (!result) throw new Error("clock in/out gagal");
-    // console.log(`${result} success`);
+    await page.type(emailSelector, email);
+    await page.type(passwordSelector, password);
 
-    // // testing
-    // const test: Buffer = await page.screenshot({ type: "png" });
-    // fs.writeFileSync("test.png", test);
+    await page.click(loginBtn);
+    const res = await page.waitForNavigation();
+    console.log("logged in!");
+    await page.setGeolocation({
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+    });
+    const context = browser.defaultBrowserContext();
+    await context.overridePermissions(liveAttendanceURL, ["geolocation"]);
+    if (!res || res.status() !== 200) throw new Error("Login Failed");
 
-    // await page.goto(singOutURL);
-    // console.log("signed out!");
+    await page.goto(liveAttendanceURL);
+    console.log("absen page");
+    await page.waitForSelector(absenBtn);
+    const checker = await page.$(successSelector);
+    if (checker) throw new Error("udah clockin/clockout");
+
+    await page.click(absenBtn);
+    await page.waitForSelector(successSelector);
+    const result: string | null = await page.$eval(
+      successSelector,
+      (el: any) => el.textContent
+    );
+    if (!result) throw new Error("clock in/out gagal");
+    console.log(`${result} success`);
+    const image: Buffer = await page.screenshot({ type: "png" });
+
+    await page.goto(singOutURL);
+    console.log("signed out!");
+    return image;
     // return true;
   } catch (err) {
     console.error(err);

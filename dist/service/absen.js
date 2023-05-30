@@ -98,38 +98,35 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
         yield page.goto(url, { waitUntil: "domcontentloaded" });
         yield page.waitForSelector(emailSelector);
         console.log("login page");
-        const res = yield page.screenshot({ type: "png" });
-        return res;
-        // await page.type(emailSelector, email);
-        // await page.type(passwordSelector, password);
-        // await page.click(loginBtn);
-        // const res = await page.waitForNavigation();
-        // console.log("logged in!");
-        // await page.setGeolocation({
-        //   latitude: Number(latitude),
-        //   longitude: Number(longitude),
-        // });
-        // const context = browser.defaultBrowserContext();
-        // await context.overridePermissions(liveAttendanceURL, ["geolocation"]);
-        // if (!res || res.status() !== 200) throw new Error("Login Failed");
-        // await page.goto(liveAttendanceURL);
-        // console.log("absen page");
-        // await page.waitForSelector(absenBtn);
-        // const checker = await page.$(successSelector);
-        // if (checker) throw new Error("udah clockin/clockout");
-        // await page.click(absenBtn);
-        // await page.waitForSelector(successSelector);
-        // const result: string | null = await page.$eval(
-        //   successSelector,
-        //   (el: any) => el.textContent
-        // );
-        // if (!result) throw new Error("clock in/out gagal");
-        // console.log(`${result} success`);
-        // // testing
-        // const test: Buffer = await page.screenshot({ type: "png" });
-        // fs.writeFileSync("test.png", test);
-        // await page.goto(singOutURL);
-        // console.log("signed out!");
+        yield page.type(emailSelector, email);
+        yield page.type(passwordSelector, password);
+        yield page.click(loginBtn);
+        const res = yield page.waitForNavigation();
+        console.log("logged in!");
+        yield page.setGeolocation({
+            latitude: Number(latitude),
+            longitude: Number(longitude),
+        });
+        const context = browser.defaultBrowserContext();
+        yield context.overridePermissions(liveAttendanceURL, ["geolocation"]);
+        if (!res || res.status() !== 200)
+            throw new Error("Login Failed");
+        yield page.goto(liveAttendanceURL);
+        console.log("absen page");
+        yield page.waitForSelector(absenBtn);
+        const checker = yield page.$(successSelector);
+        if (checker)
+            throw new Error("udah clockin/clockout");
+        yield page.click(absenBtn);
+        yield page.waitForSelector(successSelector);
+        const result = yield page.$eval(successSelector, (el) => el.textContent);
+        if (!result)
+            throw new Error("clock in/out gagal");
+        console.log(`${result} success`);
+        const image = yield page.screenshot({ type: "png" });
+        yield page.goto(singOutURL);
+        console.log("signed out!");
+        return image;
         // return true;
     }
     catch (err) {
