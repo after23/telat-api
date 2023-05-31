@@ -123,6 +123,10 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
         if (!result)
             throw new Error("clock in/out gagal");
         console.log(`${result} success`);
+        const screenshotElement = yield page.$(successSelector);
+        if (!screenshotElement)
+            throw new Error("Element not found");
+        yield screenshotElement.scrollIntoView();
         const image = yield page.screenshot({ type: "png" });
         yield page.goto(singOutURL);
         console.log("signed out!");

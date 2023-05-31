@@ -109,6 +109,10 @@ const run = async (
     );
     if (!result) throw new Error("clock in/out gagal");
     console.log(`${result} success`);
+    const screenshotElement: puppeteer.ElementHandle<Element> | null =
+      await page.$(successSelector);
+    if (!screenshotElement) throw new Error("Element not found");
+    await screenshotElement.scrollIntoView();
     const image: Buffer = await page.screenshot({ type: "png" });
 
     await page.goto(singOutURL);
