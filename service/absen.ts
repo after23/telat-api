@@ -112,7 +112,9 @@ const run = async (
     const screenshotElement: puppeteer.ElementHandle<Element> | null =
       await page.$(successSelector);
     if (!screenshotElement) throw new Error("Element not found");
-    await screenshotElement.scrollIntoView();
+    await page.evaluate((elem) => {
+      elem.scrollIntoView(true);
+    }, screenshotElement);
     const image: Buffer = await page.screenshot({ type: "png" });
 
     await page.goto(singOutURL);
