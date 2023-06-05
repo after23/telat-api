@@ -2,6 +2,7 @@ import express, { Express } from "express";
 import dotenv from "dotenv";
 import { absen } from "../service/absen";
 import { Stream } from "stream";
+import { status } from "../service/status";
 
 const router: Express = express();
 
@@ -34,6 +35,26 @@ router.get("/absen", async (req, res) => {
     return res.status(504).send("Server Timeout");
   });
   const absenResult: Buffer | string = await absen();
+  // if (!absenResult) return res.sendStatus(500);
+  if (typeof absenResult == "string") return res.status(500).send(absenResult);
+
+  // console.log(absenResult);
+  const readStream = new Stream.PassThrough();
+  readStream.end(absenResult);
+  res
+    .set({
+      "Content-Type": "image/png",
+      "Content-disosition": "attachment; filename=absen.png",
+    })
+    .status(200);
+  return readStream.pipe(res);
+});
+
+router.get("/status", async (req, res) => {
+  res.setTimeout(240_000, () => {
+    return res.status(504).send("Server Timeout");
+  });
+  const absenResult: Buffer | string = await status();
   // if (!absenResult) return res.sendStatus(500);
   if (typeof absenResult == "string") return res.status(500).send(absenResult);
 

@@ -43,15 +43,6 @@ const run = async (
         : puppeteer.executablePath(),
   };
 
-  // if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-  //   options = {
-  //     args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
-  //     defaultViewport: chrome.defaultViewport,
-  //     executablePath: await chrome.executablePath,
-  //     headless: true,
-  //     ignoreHTTPSErrors: true,
-  //   };
-  // }
   try {
     if (
       typeof process.env.EMAIL === "undefined" ||
@@ -89,9 +80,11 @@ const run = async (
     console.log("absen page");
     await page.waitForSelector(absenBtn);
     const checker = await page.$(successSelector);
-    if (checker) throw new Error("udah clockin/clockout");
+    if (!checker) {
+      const image: Buffer = await page.screenshot({ type: "png" });
+      return image;
+    }
 
-    await page.click(absenBtn);
     await page.waitForSelector(successSelector);
     const result: string | null = await page.$eval(
       successSelector,
@@ -107,8 +100,6 @@ const run = async (
     }, screenshotElement);
     const image: Buffer = await page.screenshot({ type: "png" });
 
-    await page.goto(singOutURL);
-    console.log("signed out!");
     return image;
     // return true;
   } catch (err) {
@@ -118,6 +109,8 @@ const run = async (
     return message;
   } finally {
     if (browser && page) {
+      await page.goto(singOutURL);
+      console.log("signed out!");
       await page.close();
       await browser.close();
     }
@@ -125,7 +118,7 @@ const run = async (
 };
 
 // console.log(arg);
-const absen = async (): Promise<Buffer | string> => {
+const status = async (): Promise<Buffer | string> => {
   try {
     let absenBtn: string = clockInBtn;
     let successSelector: string = clockInSuccessSelector;
@@ -146,4 +139,4 @@ const absen = async (): Promise<Buffer | string> => {
   }
 };
 
-export { absen };
+export { status };

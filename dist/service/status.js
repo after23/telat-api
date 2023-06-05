@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.absen = void 0;
+exports.status = void 0;
 const puppeteer = __importStar(require("puppeteer"));
 require("dotenv").config();
 const url = "https://hr.talenta.co/employee/dashboard";
@@ -65,15 +65,6 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
             ? process.env.PUPPETEER_EXECUTABLE_PATH
             : puppeteer.executablePath(),
     };
-    // if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-    //   options = {
-    //     args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
-    //     defaultViewport: chrome.defaultViewport,
-    //     executablePath: await chrome.executablePath,
-    //     headless: true,
-    //     ignoreHTTPSErrors: true,
-    //   };
-    // }
     try {
         if (typeof process.env.EMAIL === "undefined" ||
             typeof process.env.PASSWORD === "undefined" ||
@@ -107,9 +98,10 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
         console.log("absen page");
         yield page.waitForSelector(absenBtn);
         const checker = yield page.$(successSelector);
-        if (checker)
-            throw new Error("udah clockin/clockout");
-        yield page.click(absenBtn);
+        if (!checker) {
+            const image = yield page.screenshot({ type: "png" });
+            return image;
+        }
         yield page.waitForSelector(successSelector);
         const result = yield page.$eval(successSelector, (el) => el.textContent);
         if (!result)
@@ -122,8 +114,6 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
             elem.scrollIntoView(true);
         }, screenshotElement);
         const image = yield page.screenshot({ type: "png" });
-        yield page.goto(singOutURL);
-        console.log("signed out!");
         return image;
         // return true;
     }
@@ -136,13 +126,15 @@ const run = (absenBtn, successSelector) => __awaiter(void 0, void 0, void 0, fun
     }
     finally {
         if (browser && page) {
+            yield page.goto(singOutURL);
+            console.log("signed out!");
             yield page.close();
             yield browser.close();
         }
     }
 });
 // console.log(arg);
-const absen = () => __awaiter(void 0, void 0, void 0, function* () {
+const status = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let absenBtn = clockInBtn;
         let successSelector = clockInSuccessSelector;
@@ -164,4 +156,4 @@ const absen = () => __awaiter(void 0, void 0, void 0, function* () {
         return message;
     }
 });
-exports.absen = absen;
+exports.status = status;
